@@ -2,18 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:napp/core/utils/the_function.dart';
 
 class Newton{
-  double xl,xu,error,xr=0,xrold=0;
+  double xi,xiPlus1=0,error;
   MyFunction ff;
-  Newton(this.xl,this.xu,this.error,this.ff);
-  DataRow show(int i, double x1, double fx1, double x2, double fx2, double x3, double fx3, String err) {
+  Newton(this.xi,this.error,this.ff);
+
+
+  List<DataColumn> columns(){
+    return  [
+      DataColumn(label: Text("i")),
+      DataColumn(label: Text("Xi")),
+      DataColumn(label: Text("f(Xi)")),
+      DataColumn(label: Text("f`(Xi)")),
+      DataColumn(label: Text("error")),
+    ];
+  }
+
+  DataRow show(int i, double xi, double fxi, double fDashxi,  String err) {
     return DataRow(cells: [
       DataCell(Text(i.toString())),
-      DataCell(Text(x1.toStringAsFixed(3))),
-      DataCell(Text(fx1.toStringAsFixed(3))),
-      DataCell(Text(x2.toStringAsFixed(3))),
-      DataCell(Text(fx2.toStringAsFixed(3))),
-      DataCell(Text(x3.toStringAsFixed(3))),
-      DataCell(Text(fx3.toStringAsFixed(3))),
+      DataCell(Text(xi.toStringAsFixed(3))),
+      DataCell(Text(fxi.toStringAsFixed(3))),
+      DataCell(Text(fDashxi.toStringAsFixed(3))),
       DataCell(Text(err)),
     ]);
   }
@@ -23,22 +32,17 @@ class Newton{
     final rows = <DataRow>[];
     double err = 100.0;
     int i = 0;
+    double xiOld = 0;
     do {
-      xrold = xr;
-      xr = (xl + xu) / 2;
-      // Relative error; avoid division by zero when xr == 0
-      if(xr != 0) {
-        err = (((xr - xrold) / xr) * 100).abs();
+      xiPlus1=xi-(ff.f(xi)/ff.fPrim(xi));
+      if(xiPlus1 != 0) {
+        err = (((xi - xiOld) / xi) * 100).abs();
       }
       final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
-      rows.add(show(i, xl, ff.f(xl).toDouble(), xu, ff.f(xu).toDouble(), xr, ff.f(xr).toDouble(), errStr));
-      // Newton: keep the half that contains the root (where f changes sign)
-      if (ff.f(xl).toDouble() * ff.f(xr).toDouble() < 0) {
-        xu = xr;
-      } else {
-        xl = xr;
-      }
+      rows.add(show(i, xi, ff.f(xi).toDouble(), ff.fPrim(xi).toDouble(), errStr));
       i++;
+      xiOld=xi;
+      xi=xiPlus1;
     } while(err > error);
     return rows;
   }

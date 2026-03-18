@@ -10,7 +10,7 @@ class MyFunction{
   }
 
 
-  double fprim(double x){
+  num fPrim(double x){
     double h=1e-7;
     return(f(x+h)-f(x-h))/(2*h);
   }
