@@ -7,7 +7,7 @@ class MethodsCard extends StatelessWidget {
 final int chapter;
 final int index;
   final methods = [
-    ["Bisection Method","False Position Method","Simple Fixed Point Method","Newton's Method","Secant Method"],
+    ["Bisection Method","False Position Method","Simple Fixed Point Method","Newton Method","Secant Method"],
     ["Gauss Elimination","LU Decomposition","Cramer's Rule","Partial Pivoting","Gauss-Jordan"]
   ];
   final List<List<Widget>> specialRout=[
@@ -16,7 +16,7 @@ final int index;
     InFuction("Xl",true,"Xu",'fa'),
     InFuction("X0",false," ",'fi'),
     InFuction("X0",false," ",'n'),
-    InFuction("X0",true,"X-1",'s')
+    InFuction("X-1",true,"X0",'s')
    ],
     [
       temp(),
@@ -36,7 +36,7 @@ final int index;
               color: Colors.white,
               child: ListTile(
                 leading: Icon(chapter==0? Icons.functions_outlined:Icons.data_array_outlined,color: const Color.fromARGB(255, 8, 102, 196),size:30 ,),
-                title: Text(methods[chapter][index],style: TextStyle(fontSize: 20,)),
+                title: Text(methods[chapter][index],style: TextStyle(fontSize: 18,)),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> specialRout[chapter][index] ));
                 },

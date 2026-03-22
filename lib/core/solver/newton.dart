@@ -3,8 +3,9 @@ import 'package:napp/core/utils/the_function.dart';
 
 class Newton{
   double xi,xiPlus1=0,error;
-  MyFunction ff;
-  Newton(this.xi,this.error,this.ff);
+  MyFunction f1;
+  MyFunction f2;
+  Newton(this.xi,this.error,this.f1,this.f2);
 
 
   List<DataColumn> columns(){
@@ -20,9 +21,9 @@ class Newton{
   DataRow show(int i, double xi, double fxi, double fDashxi,  String err) {
     return DataRow(cells: [
       DataCell(Text(i.toString())),
-      DataCell(Text(xi.toStringAsFixed(3))),
-      DataCell(Text(fxi.toStringAsFixed(3))),
-      DataCell(Text(fDashxi.toStringAsFixed(3))),
+      DataCell(Text(xi.toStringAsFixed(4))),
+      DataCell(Text(fxi.toStringAsFixed(4))),
+      DataCell(Text(fDashxi.toStringAsFixed(4))),
       DataCell(Text(err)),
     ]);
   }
@@ -34,12 +35,12 @@ class Newton{
     int i = 0;
     double xiOld = 0;
     do {
-      xiPlus1=xi-(ff.f(xi)/ff.fPrim(xi));
+      xiPlus1=xi-(f1.f(xi)/f2.f(xi));
       if(xiPlus1 != 0) {
         err = (((xi - xiOld) / xi) * 100).abs();
       }
       final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
-      rows.add(show(i, xi, ff.f(xi).toDouble(), ff.fPrim(xi).toDouble(), errStr));
+      rows.add(show(i, xi, f1.f(xi).toDouble(), f2.f(xi).toDouble(), errStr));
       i++;
       xiOld=xi;
       xi=xiPlus1;

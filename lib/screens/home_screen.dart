@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:napp/widgets/cards.dart';
-
+//TODO: add animation
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(
             color: primeColor,
             fontWeight: FontWeight.w700,
-            fontSize: 40,
+            fontSize: 35,
           ),
         ),
         centerTitle: true,
@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                 "Chapter One",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontSize: 30,
+                  fontSize: 25,
                   fontFamily: 'Bebas',
                   decoration: TextDecoration.underline,
                 ),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                 "Chapter Two",
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 30,
+                  fontSize: 25,
                   fontFamily: 'Bebas',
                   decoration: TextDecoration.underline,
                 ),

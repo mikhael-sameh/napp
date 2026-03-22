@@ -21,10 +21,10 @@ class Secant {
   DataRow show(int i, double xiMinus1, double fxiMinus1,double xi, double fxi,  String err) {
     return DataRow(cells: [
       DataCell(Text(i.toString())),
-      DataCell(Text(xiMinus1.toStringAsFixed(3))),
-      DataCell(Text(fxiMinus1.toStringAsFixed(3))),
-      DataCell(Text(xi.toStringAsFixed(3))),
-      DataCell(Text(fxi.toStringAsFixed(3))),
+      DataCell(Text(xiMinus1.toStringAsFixed(4))),
+      DataCell(Text(fxiMinus1.toStringAsFixed(4))),
+      DataCell(Text(xi.toStringAsFixed(4))),
+      DataCell(Text(fxi.toStringAsFixed(4))),
       DataCell(Text(err)),
     ]);
   }

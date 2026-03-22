@@ -22,12 +22,12 @@ class FalsePosition{
   DataRow show(int i, double x1, double fx1, double x2, double fx2, double x3, double fx3, String err) {
     return DataRow(cells: [
       DataCell(Text(i.toString())),
-      DataCell(Text(x1.toStringAsFixed(3))),
-      DataCell(Text(fx1.toStringAsFixed(3))),
-      DataCell(Text(x2.toStringAsFixed(3))),
-      DataCell(Text(fx2.toStringAsFixed(3))),
-      DataCell(Text(x3.toStringAsFixed(3))),
-      DataCell(Text(fx3.toStringAsFixed(3))),
+      DataCell(Text(x1.toStringAsFixed(4))),
+      DataCell(Text(fx1.toStringAsFixed(4))),
+      DataCell(Text(x2.toStringAsFixed(4))),
+      DataCell(Text(fx2.toStringAsFixed(4))),
+      DataCell(Text(x3.toStringAsFixed(4))),
+      DataCell(Text(fx3.toStringAsFixed(4))),
       DataCell(Text(err)),
     ]);
   }
