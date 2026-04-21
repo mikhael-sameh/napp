@@ -32,9 +32,15 @@ class FalsePosition{
     ]);
   }
 
+  bool notSolving(){
+    return ff.f(xl).toDouble() * ff.f(xu).toDouble() > 0;
+  }
 
   List<DataRow> solving() {
     final rows = <DataRow>[];
+    if(ff.f(xl).toDouble() * ff.f(xu).toDouble() > 0){
+      return rows;
+    }
     double err = 100.0;
     int i = 0;
     do {
@@ -56,7 +62,12 @@ class FalsePosition{
         xl = xr;
       }
       i++;
-    } while(err > error);
+    } while(err > error && i<50);
     return rows;
   }
+
+  double getRoot(){
+    return xr;
+  }
+
 }

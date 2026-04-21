@@ -7,7 +7,8 @@ class HelpButton extends StatelessWidget{
  final TextEditingController function2;
 
  final String helper;
-  const HelpButton(this.function1,this.function2,this.function1Focus,this.function2Focus,this.helper,{super.key});
+ final int type;
+  const HelpButton(this.function1,this.function2,this.function1Focus,this.function2Focus,this.helper,this.type,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +29,18 @@ class HelpButton extends StatelessWidget{
         onPressed: () {
           if(FocusManager.instance.primaryFocus==function1Focus){
             String temp = function1.text.substring(0,function1.selection.end);
-            int len = temp.length;
             String temp2 = function1.text.substring(function1.selection.end);
+            int len = temp.length + helper.length ;
             temp+=helper;
             temp+=temp2;
-            function1.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset: len+1)));
+            function1.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset:type==1? len:len-1)));
           }else if(FocusManager.instance.primaryFocus==function2Focus){
             String temp = function2.text.substring(0,function2.selection.end);
-            int len = temp.length;
             String temp2 = function2.text.substring(function2.selection.end);
+            int len = temp.length + helper.length;
             temp+=helper;
             temp+=temp2;
-            function2.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset: len+1)));
+            function2.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset:type==1? len:len-1)));
           }
         },
         child:Text(

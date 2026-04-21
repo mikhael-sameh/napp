@@ -45,7 +45,12 @@ class Secant {
       xi_1=xi;
       xi=xiNext;
       i++;
-    } while(err > error);
+    } while(err > error && i<50);
     return rows;
   }
+
+  double getRoot(){
+    return xi;
+  }
+
 }

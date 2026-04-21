@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:napp/screens/answer_screen.dart';
+import 'package:napp/screens/chapter_1/answer_screen.dart';
 import 'package:napp/widgets/input_text.dart';
 import 'package:napp/widgets/help_button.dart';
-
+import 'package:napp/widgets/app_bar.dart';
 
 class InFuction extends StatefulWidget {
-  final String method;
-  final String hintX1;
+  final String methodChar, methodName, hintX1, hintX2;
   final bool isX2;
-  final String hintX2;
   const InFuction(
     this.hintX1,
     this.isX2,
     this.hintX2,
-    this.method, {
+    this.methodChar,
+    this.methodName, {
     super.key,
   });
 
@@ -33,17 +32,12 @@ class _InFuctionState extends State<InFuction> {
   final x2Focus = FocusNode();
   final errorFocus = FocusNode();
   Widget buildInputFX2() {
-    if (widget.method == 'n') {
+    if (widget.methodChar == 'n') {
       return Padding(
         padding: const EdgeInsets.only(top: 10.0),
-        child: InputText(
-          function2Focus,
-          x1Focus,
-          "f'(x)",
-          func2Controller,
-        ),
+        child: InputText(function2Focus, x1Focus, "f'(x)", func2Controller),
       );
-    } else if (widget.method == 'fi') {
+    } else if (widget.methodChar == 'fi') {
       return Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: InputText(function2Focus, x1Focus, "x", func2Controller),
@@ -78,11 +72,11 @@ class _InFuctionState extends State<InFuction> {
       showInputError('Please enter f(x).');
       return;
     }
-    if (widget.method == 'fi' && func2.isEmpty) {
+    if (widget.methodChar == 'fi' && func2.isEmpty) {
       showInputError('Please enter x.');
       return;
     }
-    if (widget.method == 'n' && func2.isEmpty) {
+    if (widget.methodChar == 'n' && func2.isEmpty) {
       showInputError('Please enter f`(x).');
       return;
     }
@@ -98,29 +92,53 @@ class _InFuctionState extends State<InFuction> {
       showInputError('Please enter a valid error value > 0.');
       return;
     }
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (context) {
-            if (widget.isX2) {
-              return ShowAnswer(func, "", x1, x2!, err, widget.method);
-            } else if (widget.method == 'n' || widget.method == 'fi') {
-              return ShowAnswer(func, func2, x1, 0, err, widget.method);
-            } else {
-              return ShowAnswer(func, "", x1, 0, err, widget.method);
-            }
-          },
-        ),
-      );
-  }
-@override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if(mounted){
-        function1Focus.requestFocus();
-      }
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) {
+          if (widget.isX2) {
+            return ShowAnswer(
+              func,
+              "",
+              x1,
+              x2!,
+              err,
+              widget.methodChar,
+              widget.methodName,
+              widget.hintX1,
+              widget.hintX2,
+              widget.isX2,
+            );
+          } else if (widget.methodChar == 'n' || widget.methodChar == 'fi') {
+            return ShowAnswer(
+              func,
+              func2,
+              x1,
+              0,
+              err,
+              widget.methodChar,
+              widget.methodName,
+              widget.hintX1,
+              widget.hintX2,
+              widget.isX2,
+            );
+          } else {
+            return ShowAnswer(
+              func,
+              "",
+              x1,
+              0,
+              err,
+              widget.methodChar,
+              widget.methodName,
+              widget.hintX1,
+              widget.hintX2,
+              widget.isX2,
+            );
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -130,28 +148,7 @@ class _InFuctionState extends State<InFuction> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-          ),
-          title: Text(
-            'What\'s Your Function',
-            overflow: TextOverflow.visible,
-            style: TextStyle(
-              color: Color.fromARGB(255, 8, 102, 196),
-              fontWeight: FontWeight.w700,
-              fontSize: 25,
-            ),
-          ),
-          centerTitle: true,
-          shadowColor: Color.fromARGB(255, 8, 102, 196),
-          elevation: 4,
-        ),
+        appBar: TopBar("What's Your Function"),
         backgroundColor: Colors.white,
         body: Column(
           children: [
@@ -172,9 +169,22 @@ class _InFuctionState extends State<InFuction> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Text(
+                              widget.methodName,
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 8, 102, 196),
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 12),
                             InputText(
                               function1Focus,
-                              widget.method=='fi' || widget.method=='n' ? function2Focus : x1Focus,
+                              widget.methodChar == 'fi' ||
+                                      widget.methodChar == 'n'
+                                  ? function2Focus
+                                  : x1Focus,
                               "f(x)",
                               func1Controller,
                             ),
@@ -184,8 +194,6 @@ class _InFuctionState extends State<InFuction> {
                               children: [
                                 Expanded(
                                   flex: 2,
-
-                                  ///         xl      ///////////////
                                   child: InputText(
                                     x1Focus,
                                     widget.isX2 ? x2Focus : errorFocus,
@@ -196,13 +204,10 @@ class _InFuctionState extends State<InFuction> {
                                 SizedBox(width: widget.isX2 ? 5 : 0),
                                 Expanded(
                                   flex: widget.isX2 ? 2 : 0,
-
-                                  ///         xu      ///////////////
                                   child: buildInputX2(),
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
-                                  ///     error     ///////////////
                                   child: InputText(
                                     errorFocus,
                                     FocusNode(),
@@ -251,21 +256,126 @@ class _InFuctionState extends State<InFuction> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "x" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "^" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "+" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "-" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "*" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "/" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "(" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, ")" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "{" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "}" ,1),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "sin()" ,2),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "cos()" ,2),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "tan()" ,2),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "e()" ,2),
-                    HelpButton(func1Controller, func2Controller, function1Focus, function2Focus, "ln()" ,2),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "x",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "^",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "+",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "-",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "*",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "/",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "(",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      ")",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "{",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "}",
+                      1,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "sin()",
+                      2,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "cos()",
+                      2,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "tan()",
+                      2,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "e()",
+                      2,
+                    ),
+                    HelpButton(
+                      func1Controller,
+                      func2Controller,
+                      function1Focus,
+                      function2Focus,
+                      "ln()",
+                      2,
+                    ),
                   ],
                 ),
               ),
@@ -275,6 +385,7 @@ class _InFuctionState extends State<InFuction> {
       ),
     );
   }
+
   @override
   void dispose() {
     func1Controller.dispose();

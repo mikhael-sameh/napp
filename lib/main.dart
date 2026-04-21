@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/splash_screen.dart';
+import 'package:napp/screens/home_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -7,12 +8,18 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:SplashScreen(),
-      color: Colors.white,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        canvasColor: Colors.white,
+        splashColor: Colors.white,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder()},
+        ),
+      ),
+      home: HomeScreen(),
     );
   }
 }

@@ -31,6 +31,9 @@ class Bisection{
     ]);
   }
 
+  bool notSolving(){
+    return ff.f(xl).toDouble() * ff.f(xu).toDouble() > 0;
+  }
 
   List<DataRow> solving() {
     final rows = <DataRow>[];
@@ -39,20 +42,23 @@ class Bisection{
     do {
       xrold = xr;
       xr = (xl + xu) / 2;
-      // Relative error; avoid division by zero when xr == 0
       if(xr != 0) {
          err = (((xr - xrold) / xr) * 100).abs();
       }
       final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
       rows.add(show(i, xl, ff.f(xl).toDouble(), xu, ff.f(xu).toDouble(), xr, ff.f(xr).toDouble(), errStr));
-      // Bisection: keep the half that contains the root (where f changes sign)
       if (ff.f(xl).toDouble() * ff.f(xr).toDouble() < 0) {
         xu = xr;
       } else {
         xl = xr;
       }
       i++;
-    } while(err > error);
+    } while(err > error && i<50);
     return rows;
   }
+
+  double getRoot(){
+    return xr;
+  }
+
 }

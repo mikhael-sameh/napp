@@ -44,7 +44,12 @@ class Newton{
       i++;
       xiOld=xi;
       xi=xiPlus1;
-    } while(err > error);
+    } while(err > error && i<50);
     return rows;
   }
+
+  double getRoot(){
+    return xi;
+  }
+
 }

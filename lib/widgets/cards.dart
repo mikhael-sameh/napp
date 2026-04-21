@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:napp/screens/input_screen.dart';
-import 'package:napp/screens/temp.dart';
+import 'package:napp/screens/chapter_1/input_screen.dart';
+import 'package:napp/screens/chapter_2/input_screen.dart';
 
 class MethodsCard extends StatelessWidget {
   MethodsCard(this.chapter,this.index, {super.key});
@@ -8,21 +8,21 @@ final int chapter;
 final int index;
   final methods = [
     ["Bisection Method","False Position Method","Simple Fixed Point Method","Newton Method","Secant Method"],
-    ["Gauss Elimination","LU Decomposition","Cramer's Rule","Partial Pivoting","Gauss-Jordan"]
+    ["Gauss Elimination","LU Decomposition","Cramer's Rule","Gauss-Jordan Elimination"]
   ];
   final List<List<Widget>> specialRout=[
    [
-    InFuction("Xl",true,"Xu",'b'),
-    InFuction("Xl",true,"Xu",'fa'),
-    InFuction("X0",false," ",'fi'),
-    InFuction("X0",false," ",'n'),
-    InFuction("X-1",true,"X0",'s')
+    InFuction("XL",true,"XU",'b',"Bisection Method"),
+    InFuction("XL",true,"XU",'fa',"False Position Method"),
+    InFuction("X0",false," ",'fi',"Simple Fixed Point Method"),
+    InFuction("X0",false," ",'n',"Newton Method"),
+    InFuction("X-1",true,"X0",'s',"Secant Method")
    ],
     [
-      temp(),
-      temp(),
-      temp(),
-      temp()
+     InputSystem("GE"),
+     InputSystem("LU"),
+     InputSystem("C"),
+     InputSystem("GJE"),
     ]
   ];
 
@@ -35,10 +35,10 @@ final int index;
             surfaceTintColor:  Colors.white,
               color: Colors.white,
               child: ListTile(
-                leading: Icon(chapter==0? Icons.functions_outlined:Icons.data_array_outlined,color: const Color.fromARGB(255, 8, 102, 196),size:30 ,),
-                title: Text(methods[chapter][index],style: TextStyle(fontSize: 18,)),
+                leading: Icon(chapter==1? Icons.functions_outlined:Icons.data_array_outlined,color: const Color.fromARGB(255, 8, 102, 196),size:30 ,),
+                title: Text(methods[chapter-1][index],style: TextStyle(fontSize: 18,)),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> specialRout[chapter][index] ));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> specialRout[chapter-1][index] ));
                 },
               )
           ),

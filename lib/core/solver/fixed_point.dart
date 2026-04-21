@@ -40,7 +40,12 @@ class FixedPoint{
       rows.add(show(i, xi, xiPlus1, errStr));
       i++;
       xi=xiPlus1;
-    } while(err > error);
+    } while(err > error && i<50);
     return rows;
   }
+
+  double getRoot(){
+    return xi;
+  }
+
 }
