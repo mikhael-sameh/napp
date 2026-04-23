@@ -38,7 +38,7 @@ class Newton{
       if(xiPlus1 != 0) {
         err = (((xi - xiOld) / xi) * 100).abs();
       }
-      final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
+      final errStr = (i == 0) ? '-' : err.toStringAsFixed(3);
       rows.add(show(i, xi, fn.f(xi).toDouble(), fn.fDash(xi).toDouble(), errStr));
       i++;
       xiOld=xi;

@@ -40,7 +40,7 @@ class Secant {
       if(xi != 0) {
         err = (((xi - xi_1) / xi) * 100).abs();
       }
-      final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
+      final errStr = (i == 0) ? '-' : err.toStringAsFixed(3);
       rows.add(show(i, xi_1,fn.f(xi_1).toDouble(), xi, fn.f(xi).toDouble(), errStr));
       xi_1=xi;
       xi=xiNext;

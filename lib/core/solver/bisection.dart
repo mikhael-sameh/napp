@@ -45,7 +45,7 @@ class Bisection{
       if(xr != 0) {
          err = (((xr - xrold) / xr) * 100).abs();
       }
-      final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
+      final errStr = (i == 0) ? '-' : err.toStringAsFixed(3);
       rows.add(show(i, xl, fn.f(xl).toDouble(), xu, fn.f(xu).toDouble(), xr, fn.f(xr).toDouble(), errStr));
       if (fn.f(xl).toDouble() * fn.f(xr).toDouble() < 0) {
         xu = xr;

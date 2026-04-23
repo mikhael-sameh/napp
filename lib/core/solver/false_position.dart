@@ -53,7 +53,7 @@ class FalsePosition{
       if(xr != 0) {
         err = (((xr - xrold) / xr) * 100).abs();
       }
-      final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
+      final errStr = (i == 0) ? '-' : err.toStringAsFixed(3);
       rows.add(show(i, xl, fn.f(xl).toDouble(), xu, fn.f(xu).toDouble(), xr, fn.f(xr).toDouble(), errStr));
       // Bisection: keep the half that contains the root (where f changes sign)
       if (fn.f(xl).toDouble() * fn.f(xr).toDouble() < 0) {

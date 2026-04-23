@@ -2,7 +2,7 @@ import 'package:math_parser/math_parser.dart';
 
 class MyFunction{
   late final String fn;
-  late final String? fn2=getGx(fn);
+  late final String? fn2=_getGx(fn);
   MyFunction(this.fn);
 
   num f(double value){
@@ -15,7 +15,7 @@ class MyFunction{
     return (f(x + h) - f(x - h)) / (2 * h);
   }
 
-  String? getGx(String func) {
+  String? _getGx(String func) {
     final regExp = RegExp(r'([+-]?\s*\d*\.?\d*)\s*x\^?(\d*)');
     final matches = regExp.allMatches(func);
 
@@ -38,7 +38,7 @@ class MyFunction{
         double n = powerPart.isEmpty ? 1.0 : double.parse(powerPart);
 
         String restExpr = func.replaceFirst(fullTerm, "");
-        restExpr = cleanEquation(restExpr);
+        restExpr = _cleanEquation(restExpr);
 
         candidates.add({
           "power": n,
@@ -58,7 +58,7 @@ class MyFunction{
     return candidates.first["formula"];
   }
 
-  String cleanEquation(String expr) {
+  String _cleanEquation(String expr) {
     String cleaned = expr.trim()
         .replaceAll(RegExp(r'\s+'), ' ')
         .replaceAll('+-', '-')

@@ -38,7 +38,7 @@ class FixedPoint{
       if(i != 0) {
         err = (((xiPlus1 - xi) / xiPlus1) * 100).abs();
       }
-      final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
+      final errStr = (i == 0) ? '-' : err.toStringAsFixed(3);
       rows.add(show(i, xi, xiPlus1, errStr));
       i++;
       xi=xiPlus1;
