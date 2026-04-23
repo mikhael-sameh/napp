@@ -3,8 +3,8 @@ import 'package:napp/core/utils/the_function.dart';
 
 class FalsePosition{
   double xl,xu,error,xr=0,xrold=0;
-  MyFunction ff;
-  FalsePosition(this.xl,this.xu,this.error,this.ff);
+  MyFunction fn;
+  FalsePosition(this.xl,this.xu,this.error,this.fn);
 
   List<DataColumn> columns(){
     return  [
@@ -33,12 +33,12 @@ class FalsePosition{
   }
 
   bool notSolving(){
-    return ff.f(xl).toDouble() * ff.f(xu).toDouble() > 0;
+    return fn.f(xl).toDouble() * fn.f(xu).toDouble() > 0;
   }
 
   List<DataRow> solving() {
     final rows = <DataRow>[];
-    if(ff.f(xl).toDouble() * ff.f(xu).toDouble() > 0){
+    if(fn.f(xl).toDouble() * fn.f(xu).toDouble() > 0){
       return rows;
     }
     double err = 100.0;
@@ -46,17 +46,17 @@ class FalsePosition{
     do {
       xrold = xr;
       xr = xu-(
-          (ff.f(xu)*(xl-xu))/
-              (ff.f(xl)-ff.f(xu)
+          (fn.f(xu)*(xl-xu))/
+              (fn.f(xl)-fn.f(xu)
               ));
       // Relative error; avoid division by zero when xr == 0
       if(xr != 0) {
         err = (((xr - xrold) / xr) * 100).abs();
       }
       final errStr = (i == 0) ? '—' : err.toStringAsFixed(3);
-      rows.add(show(i, xl, ff.f(xl).toDouble(), xu, ff.f(xu).toDouble(), xr, ff.f(xr).toDouble(), errStr));
+      rows.add(show(i, xl, fn.f(xl).toDouble(), xu, fn.f(xu).toDouble(), xr, fn.f(xr).toDouble(), errStr));
       // Bisection: keep the half that contains the root (where f changes sign)
-      if (ff.f(xl).toDouble() * ff.f(xr).toDouble() < 0) {
+      if (fn.f(xl).toDouble() * fn.f(xr).toDouble() < 0) {
         xu = xr;
       } else {
         xl = xr;

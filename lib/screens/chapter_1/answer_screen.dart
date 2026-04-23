@@ -9,12 +9,11 @@ import 'package:tex_text/tex_text.dart';
 import 'package:napp/widgets/app_bar.dart';
 
 class ShowAnswer extends StatefulWidget {
-  final String method, methodName, fx1, fx2, hintX1, hintX2;
+  final String method, methodName, fx, hintX1, hintX2;
   final double x1, x2, errr;
   final bool isX2;
   ShowAnswer(
-    this.fx1,
-    this.fx2,
+    this.fx,
     this.x1,
     this.x2,
     this.errr,
@@ -25,11 +24,7 @@ class ShowAnswer extends StatefulWidget {
     this.isX2, {
     super.key,
   });
-  late final String function1 = fx1.replaceAllMapped(
-    RegExp(r'(^|[^0-9])\.(?=[0-9])'),
-    (m) => '${m.group(1)}0.',
-  );
-  late final String function2 = fx2.replaceAllMapped(
+  late final String function = fx.replaceAllMapped(
     RegExp(r'(^|[^0-9])\.(?=[0-9])'),
     (m) => '${m.group(1)}0.',
   );
@@ -38,26 +33,36 @@ class ShowAnswer extends StatefulWidget {
 }
 
 class _ShowAnswerState extends State<ShowAnswer> {
-  late final MyFunction f1 = MyFunction(widget.function1);
-  late final MyFunction f2 = MyFunction(widget.function2);
+  late final MyFunction f1 = MyFunction(widget.function);
   bool notValid = false;
+  bool cantGetGx = false;
+  String errorMSG="";
   late dynamic solver;
   void mySolver() {
     switch (widget.method) {
       case 'b':
         solver = Bisection(widget.x1, widget.x2, widget.errr, f1);
         notValid = solver.notSolving();
+        if(notValid){
+          errorMSG="Since f(xl) * f(xu) > 0, so the function has not solution";
+        }
         break;
       case 'fa':
         solver = FalsePosition(widget.x1, widget.x2, widget.errr, f1);
         notValid = solver.notSolving();
-
+        if(notValid){
+          errorMSG="Since f(xl) * f(xu) > 0, so the function has not solution";
+        }
         break;
       case 'fi':
-        solver = FixedPoint(widget.x1, widget.errr, f1, f2);
+        solver = FixedPoint(widget.x1, widget.errr, f1);
+        cantGetGx = solver.canGetGx();
+        if(cantGetGx){
+          errorMSG="Can't get g(x)";
+        }
         break;
       case 'n':
-        solver = Newton(widget.x1, widget.errr, f1, f2);
+        solver = Newton(widget.x1, widget.errr, f1);
         break;
       case 's':
         solver = Secant(widget.x1, widget.x2, widget.errr, f1);
@@ -92,25 +97,23 @@ class _ShowAnswerState extends State<ShowAnswer> {
             ),
             SizedBox(height: 12),
             TexText(
-              'f(x) = \$${widget.function1}\$',
+              'f(x) = \$${widget.function}\$',
               mathStyle: MathStyle.textCramped,
-              style: const TextStyle(
-                fontSize: 22,
+              style:  TextStyle(
+                fontSize:MediaQuery.widthOf(context) /20,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
             ),
-            widget.fx2 == ""
-                ? SizedBox(height: 12)
-                : TexText(
-                    'x = \$${widget.function2}\$',
-                    mathStyle: MathStyle.textCramped,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
+            TexText(
+              'f(x) = \$${f1.getGx(widget.function)}\$',
+              mathStyle: MathStyle.textCramped,
+              style:  TextStyle(
+                fontSize: MediaQuery.widthOf(context) /20,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -143,9 +146,9 @@ class _ShowAnswerState extends State<ShowAnswer> {
               ],
             ),
             SizedBox(height: 12),
-            notValid
+            notValid || cantGetGx
                 ? Text(
-                    "Since f(xl) * f(xu) > 0, so the function has not solution",
+                    errorMSG,
                     style: TextStyle(
                       color: Colors.white,
                       backgroundColor: Colors.red,
@@ -166,7 +169,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
                       rows: solver.solving(),
                     ),
                   ),
-            notValid
+            notValid || cantGetGx
                 ?SizedBox.shrink():
             Column(
               children: [

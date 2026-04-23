@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 class HelpButton extends StatelessWidget{
   final FocusNode function1Focus;
-  final FocusNode function2Focus;
 
  final TextEditingController function1;
- final TextEditingController function2;
 
  final String helper;
  final int type;
-  const HelpButton(this.function1,this.function2,this.function1Focus,this.function2Focus,this.helper,this.type,{super.key});
+  const HelpButton(this.function1,this.function1Focus,this.helper,this.type,{super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +32,6 @@ class HelpButton extends StatelessWidget{
             temp+=helper;
             temp+=temp2;
             function1.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset:type==1? len:len-1)));
-          }else if(FocusManager.instance.primaryFocus==function2Focus){
-            String temp = function2.text.substring(0,function2.selection.end);
-            String temp2 = function2.text.substring(function2.selection.end);
-            int len = temp.length + helper.length;
-            temp+=helper;
-            temp+=temp2;
-            function2.value=TextEditingValue(text: temp,selection: TextSelection.fromPosition(TextPosition(offset:type==1? len:len-1)));
           }
         },
         child:Text(
@@ -53,6 +44,5 @@ class HelpButton extends StatelessWidget{
   }
   void deactivate() {
     function1Focus.dispose();
-    function2Focus.dispose();
   }
 }

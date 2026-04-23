@@ -3,9 +3,8 @@ import 'package:napp/core/utils/the_function.dart';
 
 class FixedPoint{
   double xi,xiPlus1=0,error;
-  MyFunction f1;
-  MyFunction f2;
-  FixedPoint(this.xi,this.error,this.f1,this.f2);
+  MyFunction fn;
+  FixedPoint(this.xi,this.error,this.fn);
 
 
   List<DataColumn> columns(){
@@ -26,13 +25,16 @@ class FixedPoint{
     ]);
   }
 
+  bool canGetGx(){
+    return fn.fn2==null;
+  }
 
   List<DataRow> solving() {
     final rows = <DataRow>[];
     double err = 100.0;
     int i = 0;
     do {
-      xiPlus1=f2.f(xi).toDouble();
+      xiPlus1=fn.gx(xi).toDouble();
       if(i != 0) {
         err = (((xiPlus1 - xi) / xiPlus1) * 100).abs();
       }

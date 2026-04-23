@@ -22,30 +22,13 @@ class InFuction extends StatefulWidget {
 
 class _InFuctionState extends State<InFuction> {
   TextEditingController func1Controller = TextEditingController();
-  TextEditingController func2Controller = TextEditingController();
   TextEditingController x1Controller = TextEditingController();
   TextEditingController x2Controller = TextEditingController();
   TextEditingController errController = TextEditingController();
   final function1Focus = FocusNode();
-  final function2Focus = FocusNode();
   final x1Focus = FocusNode();
   final x2Focus = FocusNode();
   final errorFocus = FocusNode();
-  Widget buildInputFX2() {
-    if (widget.methodChar == 'n') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: InputText(function2Focus, x1Focus, "f'(x)", func2Controller),
-      );
-    } else if (widget.methodChar == 'fi') {
-      return Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: InputText(function2Focus, x1Focus, "x", func2Controller),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
-  }
 
   Widget buildInputX2() {
     if (widget.isX2) {
@@ -63,21 +46,12 @@ class _InFuctionState extends State<InFuction> {
 
   void onCalculatePressed() {
     final func = func1Controller.text.trim();
-    final func2 = func2Controller.text.trim();
     final x1 = double.tryParse(x1Controller.text.trim());
     final err = double.tryParse(errController.text.trim());
     final x2 = widget.isX2 ? double.tryParse(x2Controller.text.trim()) : 0.0;
 
     if (func.isEmpty) {
       showInputError('Please enter f(x).');
-      return;
-    }
-    if (widget.methodChar == 'fi' && func2.isEmpty) {
-      showInputError('Please enter x.');
-      return;
-    }
-    if (widget.methodChar == 'n' && func2.isEmpty) {
-      showInputError('Please enter f`(x).');
       return;
     }
     if (x1 == null) {
@@ -99,7 +73,6 @@ class _InFuctionState extends State<InFuction> {
           if (widget.isX2) {
             return ShowAnswer(
               func,
-              "",
               x1,
               x2!,
               err,
@@ -112,7 +85,6 @@ class _InFuctionState extends State<InFuction> {
           } else if (widget.methodChar == 'n' || widget.methodChar == 'fi') {
             return ShowAnswer(
               func,
-              func2,
               x1,
               0,
               err,
@@ -125,7 +97,6 @@ class _InFuctionState extends State<InFuction> {
           } else {
             return ShowAnswer(
               func,
-              "",
               x1,
               0,
               err,
@@ -181,14 +152,10 @@ class _InFuctionState extends State<InFuction> {
                             SizedBox(height: 12),
                             InputText(
                               function1Focus,
-                              widget.methodChar == 'fi' ||
-                                      widget.methodChar == 'n'
-                                  ? function2Focus
-                                  : x1Focus,
+                              x1Focus,
                               "f(x)",
                               func1Controller,
                             ),
-                            buildInputFX2(),
                             SizedBox(height: 10),
                             Row(
                               children: [
@@ -258,121 +225,91 @@ class _InFuctionState extends State<InFuction> {
                   children: [
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "x",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "^",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "+",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "-",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "*",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "/",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "(",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       ")",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "{",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "}",
                       1,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "sin()",
                       2,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "cos()",
                       2,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "tan()",
                       2,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "e()",
                       2,
                     ),
                     HelpButton(
                       func1Controller,
-                      func2Controller,
                       function1Focus,
-                      function2Focus,
                       "ln()",
                       2,
                     ),
@@ -389,12 +326,10 @@ class _InFuctionState extends State<InFuction> {
   @override
   void dispose() {
     func1Controller.dispose();
-    func2Controller.dispose();
     x1Controller.dispose();
     x2Controller.dispose();
     errController.dispose();
     function1Focus.dispose();
-    function2Focus.dispose();
     x1Focus.dispose();
     x2Focus.dispose();
     errorFocus.dispose();
