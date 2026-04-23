@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:napp/core/solver/bisection.dart';
-import 'package:napp/core/solver/false_position.dart';
-import 'package:napp/core/solver/fixed_point.dart';
-import 'package:napp/core/solver/newton.dart';
-import 'package:napp/core/solver/secant.dart';
+import 'package:napp/core/solver/chapter_1/bisection.dart';
+import 'package:napp/core/solver/chapter_1/false_position.dart';
+import 'package:napp/core/solver/chapter_1/fixed_point.dart';
+import 'package:napp/core/solver/chapter_1/newton.dart';
+import 'package:napp/core/solver/chapter_1/secant.dart';
 import 'package:napp/core/utils/the_function.dart';
-import 'package:napp/core/services/answer_pdf_service.dart';
+import 'package:napp/core/services/chapter1_pdf_service.dart';
 import 'package:napp/widgets/app_bar.dart';
 import 'package:tex_text/tex_text.dart';
 
@@ -34,7 +34,7 @@ class ShowAnswer extends StatefulWidget {
 }
 
 class _ShowAnswerState extends State<ShowAnswer> {
-  late final MyFunction f1 = MyFunction(widget.function);
+  late final MyFunction fn = MyFunction(widget.function);
   bool notValid = false;
   bool cantGetGx = false;
   String errorMSG = "";
@@ -43,7 +43,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
   void mySolver() {
     switch (widget.method) {
       case 'b':
-        solver = Bisection(widget.x1, widget.x2, widget.errr, f1);
+        solver = Bisection(widget.x1, widget.x2, widget.errr, fn);
         notValid = solver.notSolving();
         if (notValid) {
           errorMSG = "Since f(xl) * f(xu) > 0, so the function has not solution";
@@ -52,7 +52,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
         }
         break;
       case 'fa':
-        solver = FalsePosition(widget.x1, widget.x2, widget.errr, f1);
+        solver = FalsePosition(widget.x1, widget.x2, widget.errr, fn);
         notValid = solver.notSolving();
         if (notValid) {
           errorMSG = "Since f(xl) * f(xu) > 0, so the function has not solution";
@@ -61,7 +61,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
         }
         break;
       case 'fi':
-        solver = FixedPoint(widget.x1, widget.errr, f1);
+        solver = FixedPoint(widget.x1, widget.errr, fn);
         cantGetGx = solver.canGetGx();
         if (cantGetGx) {
           errorMSG = "Can't get g(x)";
@@ -70,11 +70,11 @@ class _ShowAnswerState extends State<ShowAnswer> {
         }
         break;
       case 'n':
-        solver = Newton(widget.x1, widget.errr, f1);
+        solver = Newton(widget.x1, widget.errr, fn);
         rows=solver.solving();
         break;
       case 's':
-        solver = Secant(widget.x1, widget.x2, widget.errr, f1);
+        solver = Secant(widget.x1, widget.x2, widget.errr, fn);
         rows=solver.solving();
         break;
     }
@@ -84,7 +84,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
   Future<void> _generateAndOpenPdf() async {
     try {
       final hasSolution = !(notValid || cantGetGx);
-      final gxText =f1.fn2;
+      final gxText =fn.fn2;
       await AnswerPdfService.generateAndOpen(
         AnswerPdfPayload(
           method: widget.method,
@@ -159,7 +159,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
               ),
             ),
            widget.method=="fi" || widget.method=="n"? TexText(
-              'g(x) = \$${f1.fn2}\$',
+              'g(x) = \$${fn.fn2}\$',
               mathStyle: MathStyle.textCramped,
               style: TextStyle(
                 fontSize: MediaQuery.widthOf(context) / 20,

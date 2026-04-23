@@ -19,10 +19,10 @@ final int index;
     InFuction("X-1",true,"X0",'s',"Secant Method")
    ],
     [
-     InputSystem("GE"),
-     InputSystem("LU"),
-     InputSystem("C"),
-     InputSystem("GJE"),
+     InputSystem("GE","Gauss Elimination"),
+     InputSystem("LU","LU Decomposition"),
+     InputSystem("C","Cramer's Rule"),
+     InputSystem("GJE","Gauss-Jordan Elimination"),
     ]
   ];
 

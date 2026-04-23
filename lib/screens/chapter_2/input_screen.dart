@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:napp/screens/chapter_2/answer_screen.dart';
 import 'package:napp/widgets/app_bar.dart';
 import 'package:napp/widgets/input_data.dart';
 
 class InputSystem extends StatelessWidget {
   final String method;
-  InputSystem(this.method, {super.key});
+  final String methodName;
+  InputSystem(this.method,this.methodName, {super.key});
 
   final FocusNode x11 = FocusNode();
   final FocusNode x12 = FocusNode();
@@ -50,9 +52,20 @@ class InputSystem extends StatelessWidget {
             ListView(
               shrinkWrap: true,
               children: [
+                Text(
+                  methodName,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 8, 102, 196),
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 12),
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: (MediaQuery.of(context).viewInsets.bottom) / 2,
+                    bottom: (MediaQuery.of(context).viewInsets.bottom) / .5,
                   ),
                   child: Center(
                     child: SingleChildScrollView(
@@ -99,11 +112,21 @@ class InputSystem extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
             SizedBox(height: 10),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                final matrix = a.map((row) => List<double>.from(row)).toList();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Chapter2AnswerScreen(
+                      method: method,
+                      methodName: methodName,
+                      matrix: matrix,
+                    ),
+                  ),
+                );
+              },
               style: ButtonStyle(
                 fixedSize: WidgetStateProperty.all(Size(120, 50)),
                 shape: WidgetStateProperty.all(
@@ -119,6 +142,8 @@ class InputSystem extends StatelessWidget {
                 "Calculate",
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
+            ),
+              ],
             ),
           ],
         ),
