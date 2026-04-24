@@ -16,9 +16,20 @@
 
 Chapter 1 (nonlinear equations) is fully implemented. Chapter 2 (linear systems) provides a matrix-style input screen; the **Calculate** action is not wired to solvers yet, and `lib/screens/chapter_2/answer_screen.dart` is currently empty.
 
+## 🧭 Recent development timeline
+
+Recent commits (latest first):
+
+- `c761666` (2026-04-24): feature save by name and improve general performance
+- `042dbbc` (2026-04-24): finish chapter 2
+- `b139b45` (2026-04-23): adding PDF feature
+- `a896a1d` (2026-04-23): remove Fx2 and calculate it automatically
+- `d723fb0` (2026-04-22): update readme file
+
+
 ## ✨ Features
 
-### 📈 Chapter 1 — Roots of \(f(x) = 0\)
+### 📈 Chapter 1 — Roots of \(f(x)\)
 
 | Method | Inputs (typical) |
 |--------|------------------|
@@ -30,11 +41,21 @@ Chapter 1 (nonlinear equations) is fully implemented. Chapter 2 (linear systems)
 
 - 🧮 Functions are parsed with [`math_parser`](https://pub.dev/packages/math_parser) (independent variable **`x`**).
 - 📝 Results screen uses [`tex_text`](https://pub.dev/packages/tex_text) to render formulas nicely.
-- ⚠️ Bisection and false position detect when \(f(x_L) \cdot f(x_U) > 0\) and show an error instead of iterating.
+- ✅ Solvers are connected: `Calculate` navigates to `chapter_1/answer_screen.dart`, runs the selected solver.
+- ⚠️ Special case: bisection and false position detect when \(f(x_L) \cdot f(x_U) > 0\), then show an error instead of iterating.
 
 ### 🔲 Chapter 2 — Linear systems (UI only)
 
-Cards for **Gauss elimination**, **LU decomposition**, **Cramer’s rule**, and **Gauss–Jordan elimination** open a **3×3** augmented-style table (\(X_1, X_2, X_3, b\)). Fractions like `1/2` are accepted in cells. **Solvers for this chapter are not connected in the current codebase.**
+| Method | Inputs (typical) |
+|--------|------------------|
+| **Gauss elimination** | \(3 \times 3\) augmented system with columns \(X_1, X_2, X_3, b\) |
+| **LU decomposition** | Same as Gauss elimination |
+| **Cramer’s rule** | Same as Gauss elimination |
+| **Gauss–Jordan elimination** | Same as Gauss elimination |
+
+- 🔢 Input grid is currently fixed to **3×3** coefficients plus **\(b\)**.
+- 🧮 Fractions like `1/2` are accepted in matrix cells.
+- ✅ Solvers are connected: `Calculate` navigates to `chapter_2/answer_screen.dart`, runs the selected solver, and shows step-by-step matrices.
 
 ## 🛠️ Requirements
 
@@ -75,7 +96,7 @@ flutter build apk --release
 
 ## 🏷️ Version
 
-`pubspec.yaml`: **1.0.1+1**
+`pubspec.yaml`: **1.1.2**
 
 ## 📄 License
 
