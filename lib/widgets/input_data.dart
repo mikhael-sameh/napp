@@ -10,12 +10,15 @@ class InputNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       focusNode: myFocus,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hint: Text(".", style: TextStyle(color: Colors.black45)),
         border: InputBorder.none,
       ),
-      style: TextStyle(fontSize: 22),
+      style: const  TextStyle(fontSize: 22),
       keyboardType: TextInputType.number,
+      textInputAction: nextFocus == FocusNode()
+          ? TextInputAction.done
+          : TextInputAction.next,
       textAlign: TextAlign.start,
       onSubmitted: (value) {
         FocusScope.of(context).requestFocus(nextFocus);

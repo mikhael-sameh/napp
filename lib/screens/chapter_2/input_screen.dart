@@ -44,6 +44,7 @@ class InputSystem extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: const TopBar("What's your system"),
         backgroundColor: Colors.white,
         body: Column(
@@ -55,99 +56,119 @@ class InputSystem extends StatelessWidget {
                 Text(
                   methodName,
                   style: TextStyle(
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 8, 102, 196),
+                    fontSize: 22,
+                    color:const Color.fromARGB(255, 8, 102, 196),
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.w700,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: (MediaQuery.of(context).viewInsets.bottom) / .5,
+                    bottom: (MediaQuery.of(context).viewInsets.bottom),
                   ),
-                  child: Center(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        headingTextStyle: const TextStyle(
-                          fontSize: 25,
-                          color: Color.fromARGB(255, 8, 102, 196),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Card(
+                          color: Colors.white,
+                          child: DataTable(
+                            headingTextStyle: const TextStyle(
+                              fontSize: 25,
+                              color: Color.fromARGB(255, 8, 102, 196),
+                            ),
+                            dataTextStyle: const TextStyle(fontSize: 20),
+                            columns: const [
+                              DataColumn(label: Text("X1")),
+                              DataColumn(label: Text("X2")),
+                              DataColumn(label: Text("X3")),
+                              DataColumn(label: Text("b")),
+                            ],
+                            rows: [
+                              DataRow(
+                                cells: [
+                                  DataCell(InputNumber(x11, x21, (v) => a[0][0] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x21, x31, (v) => a[0][1] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x31, b1, (v) => a[0][2] = parseNumbers(v),),),
+                                  DataCell(InputNumber(b1, x12, (v) => a[0][3] = parseNumbers(v),),),
+                                ],
+                              ),
+                              DataRow(
+                                cells: [
+                                  DataCell(InputNumber(x12, x22, (v) => a[1][0] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x22, x32, (v) => a[1][1] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x32, b2, (v) => a[1][2] = parseNumbers(v),),),
+                                  DataCell(InputNumber(b2, x13, (v) => a[1][3] = parseNumbers(v),),),
+                                ],
+                              ),
+                              DataRow(
+                                cells: [
+                                  DataCell(InputNumber(x13, x23, (v) => a[2][0] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x23, x33, (v) => a[2][1] = parseNumbers(v),),),
+                                  DataCell(InputNumber(x33, b3, (v) => a[2][2] = parseNumbers(v),),),
+                                  DataCell(InputNumber(b3, FocusNode(), (v) => a[2][3] = parseNumbers(v),),),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        dataTextStyle: const TextStyle(fontSize: 20),
-                        columns: [
-                          DataColumn(label: Text("X1")),
-                          DataColumn(label: Text("X2")),
-                          DataColumn(label: Text("X3")),
-                          DataColumn(label: Text("b")),
-                        ],
-                        rows: [
-                          DataRow(
-                            cells: [
-                              DataCell(InputNumber(x11, x21, (v) => a[0][0] = parseNumbers(v),),),
-                              DataCell(InputNumber(x21, x31, (v) => a[0][1] = parseNumbers(v),),),
-                              DataCell(InputNumber(x31, b1, (v) => a[0][2] = parseNumbers(v),),),
-                              DataCell(InputNumber(b1, x12, (v) => a[0][3] = parseNumbers(v),),),
-                            ],
-                          ),
-                          DataRow(
-                            cells: [
-                              DataCell(InputNumber(x12, x22, (v) => a[1][0] = parseNumbers(v),),),
-                              DataCell(InputNumber(x22, x32, (v) => a[1][1] = parseNumbers(v),),),
-                              DataCell(InputNumber(x32, b2, (v) => a[1][2] = parseNumbers(v),),),
-                              DataCell(InputNumber(b2, x13, (v) => a[1][3] = parseNumbers(v),),),
-                            ],
-                          ),
-                          DataRow(
-                            cells: [
-                              DataCell(InputNumber(x13, x23, (v) => a[2][0] = parseNumbers(v),),),
-                              DataCell(InputNumber(x23, x33, (v) => a[2][1] = parseNumbers(v),),),
-                              DataCell(InputNumber(x33, b3, (v) => a[2][2] = parseNumbers(v),),),
-                              DataCell(InputNumber(b3, FocusNode(), (v) => a[2][3] = parseNumbers(v),),),
-                            ],
-                          ),
-                        ],
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () {
+                          final matrix = a.map((row) => List<double>.from(row)).toList();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Chapter2AnswerScreen(
+                                method: method,
+                                methodName: methodName,
+                                matrix: matrix,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ButtonStyle(
+                          fixedSize: WidgetStateProperty.all(Size(120, 50)),
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.all(Radius.circular(12)),
+                            ),
+                          ),
+                          backgroundColor: WidgetStateProperty.all(
+                            Color.fromARGB(255, 8, 102, 196),
+                          ),
+                        ),
+                        child:const Text(
+                          "Calculate",
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-            SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                final matrix = a.map((row) => List<double>.from(row)).toList();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Chapter2AnswerScreen(
-                      method: method,
-                      methodName: methodName,
-                      matrix: matrix,
-                    ),
-                  ),
-                );
-              },
-              style: ButtonStyle(
-                fixedSize: WidgetStateProperty.all(Size(120, 50)),
-                shape: WidgetStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.all(Radius.circular(12)),
-                  ),
-                ),
-                backgroundColor: WidgetStateProperty.all(
-                  Color.fromARGB(255, 8, 102, 196),
-                ),
-              ),
-              child: Text(
-                "Calculate",
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              ),
-            ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+  void dispose() {
+    x11.dispose();
+    x12.dispose();
+    x13.dispose();
+    x21.dispose();
+    x22.dispose();
+    x23.dispose();
+    x31.dispose();
+    x32.dispose();
+    x33.dispose();
+    b1.dispose();
+    b2.dispose();
+    b3.dispose();
   }
 }

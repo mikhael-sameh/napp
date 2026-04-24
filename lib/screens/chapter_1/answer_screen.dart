@@ -40,24 +40,29 @@ class _ShowAnswerState extends State<ShowAnswer> {
   String errorMSG = "";
   late dynamic solver;
   late final List<DataRow> rows;
+  late final List<DataColumn> columns;
   void mySolver() {
     switch (widget.method) {
       case 'b':
         solver = Bisection(widget.x1, widget.x2, widget.errr, fn);
         notValid = solver.notSolving();
         if (notValid) {
-          errorMSG = "Since f(xl) * f(xu) > 0, so the function has not solution";
-        }else{
-          rows=solver.solving();
+          errorMSG =
+              "Since f(xl) * f(xu) > 0, so the function has not solution";
+        } else {
+          rows = solver.solving();
+          columns = solver.columns();
         }
         break;
       case 'fa':
         solver = FalsePosition(widget.x1, widget.x2, widget.errr, fn);
         notValid = solver.notSolving();
         if (notValid) {
-          errorMSG = "Since f(xl) * f(xu) > 0, so the function has not solution";
-        }else{
-          rows=solver.solving();
+          errorMSG =
+              "Since f(xl) * f(xu) > 0, so the function has not solution";
+        } else {
+          rows = solver.solving();
+          columns = solver.columns();
         }
         break;
       case 'fi':
@@ -65,30 +70,107 @@ class _ShowAnswerState extends State<ShowAnswer> {
         cantGetGx = solver.canGetGx();
         if (cantGetGx) {
           errorMSG = "Can't get g(x)";
-        }else{
-          rows=solver.solving();
+        } else {
+          rows = solver.solving();
+          columns = solver.columns();
         }
         break;
       case 'n':
         solver = Newton(widget.x1, widget.errr, fn);
-        rows=solver.solving();
+        rows = solver.solving();
+        columns = solver.columns();
         break;
       case 's':
         solver = Secant(widget.x1, widget.x2, widget.errr, fn);
-        rows=solver.solving();
+        rows = solver.solving();
+        columns = solver.columns();
         break;
     }
   }
 
+  String fileName = "";
+
+  Widget theBottomSheet(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            "Save Name",
+            style: TextStyle(fontSize: 35, color: Color.fromARGB(255, 8, 102, 196),height: 2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: TextField(
+              style: TextStyle(
+                color: Color.fromARGB(255, 8, 102, 162),
+                fontSize: 20,
+              ),
+              textInputAction: TextInputAction.done,
+              cursorColor: Colors.lightBlueAccent,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                fileName = value;
+              },
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.black, width: 1.2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 8, 102, 196),
+                    width: 1.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: TextButton(
+              onPressed: () {
+                _generateAndOpenPdf();
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                fixedSize: WidgetStateProperty.all(Size(100, 50)),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.all(Radius.circular(20)),
+                  ),
+                ),
+                backgroundColor: WidgetStateProperty.all( Color.fromARGB(255, 51, 134, 248),
+                ),
+              ),
+              child: Text(
+                "Save",
+                style: TextStyle(fontSize: 22, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<void> _generateAndOpenPdf() async {
     try {
       final hasSolution = !(notValid || cantGetGx);
-      final gxText =fn.fn2;
+      final gxText = fn.fn2;
       await AnswerPdfService.generateAndOpen(
         AnswerPdfPayload(
           method: widget.method,
           methodName: widget.methodName,
+          fileName: fileName,
           functionText: widget.function,
           gFunctionText: gxText!,
           hintX1: widget.hintX1,
@@ -100,21 +182,20 @@ class _ShowAnswerState extends State<ShowAnswer> {
           hasSolution: hasSolution,
           errorMessage: hasSolution ? null : errorMSG,
           rootText: hasSolution ? solver.getRoot().toStringAsFixed(4) : null,
-          columns: hasSolution ? (solver.columns() as List<DataColumn>) : const [],
-          rows: hasSolution ? (rows) : const [],
+          columns: hasSolution
+              ?  columns
+              : const [],
+          rows: hasSolution ? rows : const [],
         ),
       );
       if (!mounted) {
         return;
       }
     } catch (e) {
-      if (!mounted) {
-        return;
-      }
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to generate PDF: $e')));
-    } finally {
+      return;
     }
   }
 
@@ -125,12 +206,23 @@ class _ShowAnswerState extends State<ShowAnswer> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const TopBar('Answer'),
       floatingActionButton: FloatingActionButton(
-        onPressed:  _generateAndOpenPdf,
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: theBottomSheet(context),
+            ),
+          ),
+        ),
         backgroundColor: Color.fromARGB(255, 51, 134, 248),
         child: const Icon(Icons.picture_as_pdf, color: Colors.white, size: 35),
       ),
@@ -148,7 +240,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             TexText(
               'f(x) = \$${widget.function}\$',
               mathStyle: MathStyle.textCramped,
@@ -158,15 +250,17 @@ class _ShowAnswerState extends State<ShowAnswer> {
                 color: Colors.black87,
               ),
             ),
-           widget.method=="fi" || widget.method=="n"? TexText(
-              'g(x) = \$${fn.fn2}\$',
-              mathStyle: MathStyle.textCramped,
-              style: TextStyle(
-                fontSize: MediaQuery.widthOf(context) / 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-            ):SizedBox.shrink(),
+            widget.method == "fi" || widget.method == "n"
+                ? TexText(
+                    'g(x) = \$${fn.fn2}\$',
+                    mathStyle: MathStyle.textCramped,
+                    style: TextStyle(
+                      fontSize: MediaQuery.widthOf(context) / 20,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -187,7 +281,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
                           color: Colors.black87,
                         ),
                       )
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
                 Text(
                   "Error = ${widget.errr}",
                   style: const TextStyle(
@@ -198,35 +292,38 @@ class _ShowAnswerState extends State<ShowAnswer> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             notValid || cantGetGx
                 ? Text(
                     errorMSG,
-                    style: TextStyle(
+                    style:const  TextStyle(
                       color: Colors.white,
                       backgroundColor: Colors.red,
                       fontSize: 20,
                     ),
                     textAlign: TextAlign.center,
                   )
-                : SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      dividerThickness: 2,
-                      dataTextStyle: const TextStyle(fontSize: 18),
-                      headingTextStyle: const TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 8, 102, 196),
+                : Card(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        dividerThickness: 2,
+                        dataTextStyle: const TextStyle(fontSize: 18),
+                        headingTextStyle: const TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 8, 102, 196),
+                        ),
+                        columns: columns,
+                        rows: rows,
                       ),
-                      columns: solver.columns(),
-                      rows: rows,
                     ),
                   ),
             notValid || cantGetGx
-                ? SizedBox.shrink()
+                ? const SizedBox.shrink()
                 : Column(
                     children: [
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
                         "Root = ${solver.getRoot().toStringAsFixed(4)}",
                         style: const TextStyle(

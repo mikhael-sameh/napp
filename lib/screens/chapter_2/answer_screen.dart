@@ -52,11 +52,78 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
     }
   }
 
-  String _f(double value) {
-    if (value.abs() < 1e-10) {
-      return '0.0000';
-    }
-    return value.toStringAsFixed(4);
+  String fileName = "";
+
+  Widget theBottomSheet(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            "Save Name",
+            style: TextStyle(fontSize: 35, color: Color.fromARGB(255, 8, 102, 196), height: 2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: TextField(
+              style: TextStyle(
+                color: Color.fromARGB(255, 8, 102, 162),
+                fontSize: 20,
+              ),
+              textInputAction: TextInputAction.done,
+              cursorColor: Colors.lightBlueAccent,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                fileName = value;
+              },
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.black, width: 1.2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 8, 102, 196),
+                    width: 1.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: TextButton(
+              onPressed: () {
+                _generateAndOpenPdf();
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                fixedSize: WidgetStateProperty.all(Size(100, 50)),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.all(Radius.circular(20)),
+                  ),
+                ),
+                backgroundColor: WidgetStateProperty.all(Color.fromARGB(255, 51, 134, 248),
+                ),
+              ),
+              child: Text(
+                "Save",
+                style: TextStyle(fontSize: 22, color: Colors.white,),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _generateAndOpenPdf() async {
@@ -71,12 +138,9 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
         return;
       }
     } catch (e) {
-      if (!mounted) {
-        return;
-      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to generate PDF: $e')),
-      );
+         SnackBar(content: Text('Failed to generate PDF: $e')),);
+        return;
     }
   }
 
@@ -86,7 +150,18 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
       backgroundColor: Colors.white,
       appBar: const TopBar('Answer'),
       floatingActionButton: FloatingActionButton(
-        onPressed: _generateAndOpenPdf,
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: theBottomSheet(context),
+            ),
+          ),
+        ),
         backgroundColor: const Color.fromARGB(255, 51, 134, 248),
         child: const Icon(Icons.picture_as_pdf, color: Colors.white, size: 35),
       ),
@@ -124,11 +199,11 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
                 border: Border.all(color: const Color.fromARGB(255, 8, 102, 196)),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'x1 = ${_f(solution.roots[0])}',
+                    'x1 = ${solution.roots[0].toStringAsFixed(4)}',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Color.fromARGB(255, 4, 62, 125),
@@ -136,7 +211,7 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
                     ),
                   ),
                   Text(
-                    'x2 = ${_f(solution.roots[1])}',
+                    'x2 = ${solution.roots[1].toStringAsFixed(4)}',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Color.fromARGB(255, 4, 62, 125),
@@ -144,7 +219,7 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
                     ),
                   ),
                   Text(
-                    'x3 = ${_f(solution.roots[2])}',
+                    'x3 = ${solution.roots[2].toStringAsFixed(4)}',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Color.fromARGB(255, 4, 62, 125),
@@ -163,7 +238,6 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
   Widget _buildStepCard(Chapter2Step step) {
     return Card(
       color: Colors.white,
-      surfaceTintColor: Colors.white,
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -229,7 +303,7 @@ class _Chapter2AnswerScreenState extends State<Chapter2AnswerScreen> {
                 (row) => DataRow(
                   cells: List.generate(
                     matrix[row].length,
-                    (col) => DataCell(Text(_f(matrix[row][col]), style: const TextStyle(fontSize: 16))),
+                    (col) => DataCell(Text(matrix[row][col].toStringAsFixed(4), style: const TextStyle(fontSize: 16))),
                   ),
                 ),
               ),

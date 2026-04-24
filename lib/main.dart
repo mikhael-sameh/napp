@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         canvasColor: Colors.white,
         splashColor: Colors.white,
-        pageTransitionsTheme: PageTransitionsTheme(
+        pageTransitionsTheme:const  PageTransitionsTheme(
           builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder()},
         ),
       ),
-      home: HomeScreen(),
+      home:const  HomeScreen(),
     );
   }
 }

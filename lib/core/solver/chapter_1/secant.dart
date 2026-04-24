@@ -8,7 +8,7 @@ class Secant {
 
 
   List<DataColumn> columns(){
-    return  [
+    return const [
       DataColumn(label: Text("i")),
       DataColumn(label: Text("Xi-1")),
       DataColumn(label: Text("f(Xi-1)")),

@@ -6,7 +6,7 @@ class Bisection{
   MyFunction fn;
   Bisection(this.xl,this.xu,this.error,this.fn);
   List<DataColumn> columns(){
-  return  [
+  return const  [
     DataColumn(label: Text("i")),
     DataColumn(label: Text("Xl")),
     DataColumn(label: Text("f(Xl)")),

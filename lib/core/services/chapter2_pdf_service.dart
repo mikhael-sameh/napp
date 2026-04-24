@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-/// Data for exporting Chapter 2 (linear systems) answers to PDF.
 class Chapter2PdfPayload {
   final String methodName;
   final Chapter2Solution solution;
@@ -17,8 +16,6 @@ class Chapter2PdfPayload {
   });
 }
 
-/// PDF export for [Chapter2AnswerScreen]: method title, error banner, step
-/// cards with matrices, then final x1–x3.
 class Chapter2AnswerPdfService {
   static Future<String> generateAndOpen(Chapter2PdfPayload payload) async {
     final pdf = pw.Document();

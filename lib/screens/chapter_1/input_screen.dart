@@ -119,6 +119,7 @@ class _InFuctionState extends State<InFuction> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: TopBar("What's Your Function"),
         backgroundColor: Colors.white,
         body: Column(
@@ -131,19 +132,14 @@ class _InFuctionState extends State<InFuction> {
                     shrinkWrap: true,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          bottom:
-                              (MediaQuery.of(context).viewInsets.bottom) / 4,
-                        ),
+                        padding:const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               widget.methodName,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 22,
                                 color: Color.fromARGB(255, 8, 102, 196),
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w700,
@@ -325,6 +321,7 @@ class _InFuctionState extends State<InFuction> {
 
   @override
   void dispose() {
+    super.dispose();
     func1Controller.dispose();
     x1Controller.dispose();
     x2Controller.dispose();
@@ -333,6 +330,5 @@ class _InFuctionState extends State<InFuction> {
     x1Focus.dispose();
     x2Focus.dispose();
     errorFocus.dispose();
-    super.dispose();
   }
 }

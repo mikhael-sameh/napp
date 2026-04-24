@@ -21,24 +21,24 @@ class InputText extends StatelessWidget {
       decoration: InputDecoration(
         label: Text(
           theHint,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color.fromARGB(255, 35, 123, 216),
             fontSize: 17,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.black, width: 1.2),
+          borderSide:const  BorderSide(color: Colors.black, width: 1.2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Color.fromARGB(255, 8, 102, 196),
             width: 1.2,
           ),
         ),
       ),
-      cursorColor: Color.fromARGB(255, 8, 102, 196),
+      cursorColor:const  Color.fromARGB(255, 8, 102, 196),
       textAlign: TextAlign.center,
       textInputAction: nextFocus == FocusNode()
           ? TextInputAction.done
@@ -47,7 +47,7 @@ class InputText extends StatelessWidget {
       onSubmitted: (value) {
         FocusScope.of(context).requestFocus(nextFocus);
       },
-      style: TextStyle(color: Color.fromARGB(255, 8, 102, 162), fontSize: 20),
+      style:const TextStyle(color: Color.fromARGB(255, 8, 102, 162), fontSize: 20),
     );
   }
 }

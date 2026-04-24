@@ -20,13 +20,13 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         overflow: TextOverflow.visible,
         style: TextStyle(
-          color: Color.fromARGB(255, 8, 102, 196),
+          color: const Color.fromARGB(255, 8, 102, 196),
           fontWeight: FontWeight.w700,
           fontSize: MediaQuery.widthOf(context) / 12.5,
         ),
       ),
       centerTitle: true,
-      shadowColor: Color.fromARGB(255, 8, 102, 196),
+      shadowColor: const Color.fromARGB(255, 8, 102, 196),
       elevation: 4,
     );
   }

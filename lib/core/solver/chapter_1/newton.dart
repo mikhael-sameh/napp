@@ -8,7 +8,7 @@ class Newton{
 
 
   List<DataColumn> columns(){
-    return  [
+    return const  [
       DataColumn(label: Text("i")),
       DataColumn(label: Text("Xi")),
       DataColumn(label: Text("f(Xi)")),

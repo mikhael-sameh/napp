@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +8,7 @@ import 'package:pdf/widgets.dart' as pw;
 class AnswerPdfPayload {
   final String method;
   final String methodName;
+  final String fileName;
   final String functionText;
   final String gFunctionText;
   final String hintX1;
@@ -26,6 +26,7 @@ class AnswerPdfPayload {
   const AnswerPdfPayload({
     required this.method,
     required this.methodName,
+    required this.fileName,
     required this.functionText,
     required this.gFunctionText,
     required this.hintX1,
@@ -42,7 +43,6 @@ class AnswerPdfPayload {
   });
 }
 
-/// PDF layout aligned with [ShowAnswer] (chapter 1 answer screen).
 class AnswerPdfService {
   static const int _titleBlue = 0xFF0866C4;
   static const int _rootBlue = 0xFF043E7D;
@@ -56,13 +56,9 @@ class AnswerPdfService {
       ),
     );
 
-    final now = DateTime.now();
-    final timestamp =
-        '${now.year.toString().padLeft(4, '0')}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
-    final safeName = payload.methodName.replaceAll(RegExp(r'[^\w\-]+'), '_');
     Directory? directory = await getDownloadsDirectory();
     directory ??= await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/answer_ch1_${safeName}_$timestamp.pdf';
+    final filePath =payload.fileName!=""? '${directory.path}/${payload.fileName}.pdf':'${directory.path}/${payload.methodName} answer.pdf';
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
 

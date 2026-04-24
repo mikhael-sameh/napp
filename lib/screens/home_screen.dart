@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopBar("NAPP"),
+      appBar:const  TopBar("NAPP"),
       backgroundColor: Colors.white,
       body: ListView(
         children: [

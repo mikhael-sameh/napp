@@ -36,13 +36,10 @@ class HelpButton extends StatelessWidget{
         },
         child:Text(
           helper,
-          style: TextStyle(fontSize: 25, color: Colors.white),
+          style: const TextStyle(fontSize: 25, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),
     );
-  }
-  void deactivate() {
-    function1Focus.dispose();
   }
 }
