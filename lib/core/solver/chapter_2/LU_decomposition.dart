@@ -2,7 +2,6 @@ import 'package:napp/core/utils/solver_models.dart';
 
 class LUDecompositionSolver {
   final List<List<double>> _augmented;
-  static const double _eps = 1e-12;
 
   LUDecompositionSolver(List<List<double>> matrix) : _augmented = cloneMatrix(matrix);
 
@@ -32,7 +31,7 @@ class LUDecompositionSolver {
     ];
 
     for (int k = 0; k < 3; k++) {
-      if (u[k][k].abs() < _eps) {
+      if (u[k][k] == 0) {
         return Chapter2Solution(
           hasSolution: false,
           roots: const [],
@@ -76,7 +75,7 @@ class LUDecompositionSolver {
       ),
     );
 
-    if (u[2][2].abs() < _eps || u[1][1].abs() < _eps || u[0][0].abs() < _eps) {
+    if (u[2][2] == 0 || u[1][1] == 0 || u[0][0] == 0) {
       return Chapter2Solution(
         hasSolution: false,
         roots: const [],

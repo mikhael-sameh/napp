@@ -13,8 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        canvasColor: Colors.white,
-        splashColor: Colors.white,
         pageTransitionsTheme:const  PageTransitionsTheme(
           builders: {TargetPlatform.android: CupertinoPageTransitionsBuilder()},
         ),

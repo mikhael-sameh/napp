@@ -2,7 +2,6 @@ import 'package:napp/core/utils/solver_models.dart';
 
 class GaussJordanEliminationSolver {
   final List<List<double>> _a;
-  static const double _eps = 1e-12;
 
   GaussJordanEliminationSolver(List<List<double>> matrix) : _a = cloneMatrix(matrix);
 
@@ -25,7 +24,7 @@ class GaussJordanEliminationSolver {
 
     for (int pivotIndex = 0; pivotIndex < 3; pivotIndex++) {
       final pivot = _a[pivotIndex][pivotIndex];
-      if (pivot.abs() < _eps) {
+      if (pivot == 0) {
         return Chapter2Solution(
           hasSolution: false,
           roots: const [],
@@ -50,7 +49,7 @@ class GaussJordanEliminationSolver {
           continue;
         }
         final factor = _a[row][pivotIndex];
-        if (factor.abs() < _eps) {
+        if (factor == 0) {
           continue;
         }
         for (int j = 0; j < 4; j++) {

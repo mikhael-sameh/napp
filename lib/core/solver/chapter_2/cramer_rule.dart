@@ -2,7 +2,6 @@ import 'package:napp/core/utils/solver_models.dart';
 
 class CramerRuleSolver {
   final List<List<double>> _augmented;
-  static const double _eps = 1e-12;
 
   CramerRuleSolver(List<List<double>> matrix) : _augmented = cloneMatrix(matrix);
 
@@ -28,7 +27,7 @@ class CramerRuleSolver {
       ),
     ];
 
-    final detA = _det3(a);
+    final detA = _det(a);
     steps.add(
       Chapter2Step(
         title: 'Compute determinant of A',
@@ -37,7 +36,7 @@ class CramerRuleSolver {
       ),
     );
 
-    if (detA.abs() < _eps) {
+    if (detA.abs() == 0) {
       return Chapter2Solution(
         hasSolution: false,
         roots: const [],
@@ -52,7 +51,7 @@ class CramerRuleSolver {
       for (int row = 0; row < 3; row++) {
         ai[row][col] = b[row];
       }
-      final detAi = _det3(ai);
+      final detAi = _det(ai);
       final x = detAi / detA;
       roots.add(x);
 
@@ -74,7 +73,7 @@ class CramerRuleSolver {
     );
   }
 
-  double _det3(List<List<double>> m) {
+  double _det(List<List<double>> m) {
     return (m[0][0] * ((m[1][1] * m[2][2]) - (m[1][2] * m[2][1]))) -
         (m[0][1] * ((m[1][0] * m[2][2]) - (m[1][2] * m[2][0]))) +
         (m[0][2] * ((m[1][0] * m[2][1]) - (m[1][1] * m[2][0])));

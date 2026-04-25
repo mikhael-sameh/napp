@@ -4,7 +4,6 @@ import 'package:napp/core/utils/solver_models.dart';
 
 class GaussEliminationSolver {
   final List<List<double>> _a;
-  static const double _eps = 1e-12;
 
   GaussEliminationSolver(List<List<double>> matrix) : _a = cloneMatrix(matrix);
 
@@ -25,7 +24,7 @@ class GaussEliminationSolver {
       ),
     ];
 
-    if (_a[0][0].abs() < _eps) {
+    if (_a[0][0] == 0) {
       return Chapter2Solution(
         hasSolution: false,
         roots: const [],
@@ -52,7 +51,7 @@ class GaussEliminationSolver {
       ),
     );
 
-    if (_a[1][1].abs() < _eps) {
+    if (_a[1][1] == 0) {
       return Chapter2Solution(
         hasSolution: false,
         roots: const [],
@@ -74,7 +73,7 @@ class GaussEliminationSolver {
       ),
     );
 
-    if (_a[2][2].abs() < _eps) {
+    if (_a[2][2] == 0) {
       return Chapter2Solution(
         hasSolution: false,
         roots: const [],
