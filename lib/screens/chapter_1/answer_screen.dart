@@ -250,7 +250,7 @@ class _ShowAnswerState extends State<ShowAnswer> {
                 color: Colors.black87,
               ),
             ),
-            widget.method == "fi" || widget.method == "n"
+            widget.method == "fi" && !cantGetGx
                 ? TexText(
                     'g(x) = \$${fn.fn2}\$',
                     mathStyle: MathStyle.textCramped,
